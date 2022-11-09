@@ -15,6 +15,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,5 +74,19 @@ public class PostsApiControllerTest {
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
+    }
+
+    @Test
+    public void deletePost() throws Exception {
+        // 데이터 하나 들어가 있는거를 가져와서 지운다
+        // 들어가 있는게 없으니까 일단 넣는다
+        Posts savedPosts = postsRepository.save(Posts.builder().title("title").content("content").author("author").build());
+        Long deleteId = savedPosts.getId();
+
+        Optional<Posts> posts = postsRepository.findById(deleteId);
+
+        posts.ifPresent(value -> postsRepository.delete(value));
+
+        assertThat(postsRepository.findById(deleteId)).isEmpty();
     }
  }
