@@ -17,6 +17,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  session:
+    store-type: jdbc
 server:
   servlet:
     encoding:
